@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+
+<body>
+
+
+    <svg id="canvas" width="750" height="550" viewBox="0 0 750 550"></svg>
+
+    <div class="tools">
+        <div id="shape">
+            <div class="tool" contenteditable="true" data-shape="line">
+                <div class="line"> </div>
+            </div>
+
+            <div class="tool circle" contenteditable="true" data-shape="circle"></div>
+            <div class="tool" contenteditable="true" data-shape="rectangle"></div>
+        </div>
+        <div class="color">
+            <div class="tool" contenteditable="true" data-color="black"></div>
+            <div class="tool" contenteditable="true" data-color="red"></div>
+            <div class="tool" contenteditable="true" data-color="green"></div>
+            <div class="tool" contenteditable="true" data-color="blue"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
