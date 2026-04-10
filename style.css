@@ -4,7 +4,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-
 }
 
 #canvas {
@@ -64,7 +63,9 @@ body {
     border: 1px solid #fff;
     cursor: pointer;
     caret-color: transparent;
-
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
 }
 
 .tool:focus {

@@ -43,7 +43,7 @@ function calcRadius(startCoordinates, endCoordinates) {
 
 }
 
-function drawLine(startCoordinates, endCoordinates) {
+function drawLine(event, startCoordinates, endCoordinates) {
     let line = document.createElementNS("http://www.w3.org/2000/svg", "line");
     line.setAttribute('x1', startCoordinates.x);
     line.setAttribute('y1', startCoordinates.y);
@@ -54,7 +54,18 @@ function drawLine(startCoordinates, endCoordinates) {
     return line;
 }
 
-function drawCircle(startCoordinates, endCoordinates) {
+function drawPencil(event, coordinates) {
+    let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circle.setAttribute('cx', coordinates.x);
+    circle.setAttribute('cy', coordinates.y);
+    circle.setAttribute('r', 1);
+    circle.setAttribute('stroke', color);
+    circle.setAttribute('fill', color);
+    canvas.appendChild(circle);
+    return circle;
+}
+
+function drawCircle(event, startCoordinates, endCoordinates) {
     let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     circle.setAttribute('cx', startCoordinates.x);
     circle.setAttribute('cy', startCoordinates.y);
@@ -66,25 +77,37 @@ function drawCircle(startCoordinates, endCoordinates) {
 }
 
 
-function drawRectangle(startCoordinates, endCoordinates) {
+function drawRectangle(event, startCoordinates, endCoordinates) {
+    let shiftPressed = event.shiftKey;
     let rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
     rect.setAttribute('x', Math.min(startCoordinates.x, endCoordinates.x));
     rect.setAttribute('y', Math.min(startCoordinates.y, endCoordinates.y));
-    rect.setAttribute('width', Math.abs(endCoordinates.x - startCoordinates.x));
-    rect.setAttribute('height', Math.abs(endCoordinates.y - startCoordinates.y));
+    let width = Math.abs(endCoordinates.x - startCoordinates.x),
+        height = Math.abs(endCoordinates.y - startCoordinates.y);
+    if (shiftPressed) {
+        let edgeLenght = Math.max(width, height);
+        rect.setAttribute('width', edgeLenght);
+        rect.setAttribute('height', edgeLenght);
+    } else {
+        rect.setAttribute('width', width);
+        rect.setAttribute('height', height);
+    }
+
     rect.setAttribute('stroke', color);
     rect.setAttribute('fill', 'none');
     canvas.appendChild(rect);
     return rect;
 }
 
-function drawShape(startCoordinates, endCoordinates) {
+function drawShape(event, startCoordinates, endCoordinates) {
     if (shapeType == 'line') {
-        return drawLine(startCoordinates, endCoordinates);
+        return drawLine(event, startCoordinates, endCoordinates);
     } else if (shapeType == 'circle') {
-        return drawCircle(startCoordinates, endCoordinates);
+        return drawCircle(event, startCoordinates, endCoordinates);
     } else if (shapeType == 'rectangle') {
-        return drawRectangle(startCoordinates, endCoordinates);
+        return drawRectangle(event, startCoordinates, endCoordinates);
+    } else if (shapeType == 'pencil') {
+        return drawPencil(event, endCoordinates);
     } else {
         console.log(`Error: ${shapeType} not exists.`);
     }
@@ -97,7 +120,7 @@ canvas.addEventListener('mouseup', function (event) {
         y: event.offsetY,
     };
 
-    drawShape(startCoords, endCoords);
+    drawShape(event, startCoords, endCoords);
 })
 
 canvas.addEventListener('mousemove', function (event) {
@@ -109,11 +132,11 @@ canvas.addEventListener('mousemove', function (event) {
         y: event.offsetY,
     };
 
-    if ((currentShape !== null) && (currentShape !== undefined)) {
+    if ((currentShape !== null) && (currentShape !== undefined) && (shapeType != 'pencil')) {
         canvas.removeChild(currentShape);
     }
 
-    currentShape = drawShape(startCoords, endCoords);
+    currentShape = drawShape(event, startCoords, endCoords);
 
 })
 
